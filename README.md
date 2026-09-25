@@ -23,9 +23,9 @@ Kumpulan program Python untuk tugas **Pengolahan Citra Digital**, dari operasi d
 
 | Tugas | File | Fokus |
 |---|---|---|
-| 1 | `image_lab.py` | Baca citra, statistik piksel, patch 8×8, rasio kompresi, konversi warna |
-| 2 | `2-ti-eq.py` | Transformasi intensitas (negatif, log, power-law, contrast stretching) & ekualisasi histogram manual |
-| 3 | `3-filter-spasial.py` | Konvolusi 2D manual: smoothing, sharpening, edge detection, median filter |
+| 1 | `tugas 1 pcv.py` | Baca citra, statistik piksel, patch 8×8, rasio kompresi, konversi warna |
+| 2 | `tugas 2 pcv.py` | Transformasi intensitas (negatif, log, power-law, contrast stretching) & ekualisasi histogram manual |
+| 3 | `tugas 3 pcv.py` | Konvolusi 2D manual: smoothing, sharpening, edge detection, median filter |
 
 Aturan yang dipegang di Tugas 2 & 3: **dilarang** memakai fungsi bawaan OpenCV/NumPy untuk proses citranya (`cv2.equalizeHist`, `cv2.LUT`, `cv2.filter2D`, `cv2.GaussianBlur`, `cv2.Sobel`, `np.histogram`, dsb). Semua histogram, LUT, dan konvolusi dihitung sendiri lewat operasi array NumPy. `cv2.imread`/`cv2.imwrite`/`matplotlib` hanya dipakai untuk baca & tampilkan, bukan untuk memproses.
 
@@ -45,14 +45,14 @@ Aturan yang dipegang di Tugas 2 & 3: **dilarang** memakai fungsi bawaan OpenCV/N
 ```text
 pcv-tasks/
 │
-├── image_lab.py          # Tugas 1
-├── 2-ti-eq.py             # Tugas 2
-├── 3-filter-spasial.py    # Tugas 3
+├── tugas 1 pcv.py          # Tugas 1
+├── tugas 2 pcv.py             # Tugas 2
+├── tugas 3 pcv.py    # Tugas 3
 ├── README.md
 │
-├── gambar_terang.jpg
-├── gambar_gelap.jpg
-└── gambar_kontras_rendah.jpg
+├── gambar_terang.JPG
+├── gambar_gelap.JPG
+└── gambar_kontras_rendah.JPG
 ```
 
 File hasil (`hasil_*.png`) akan dibuat otomatis oleh Tugas 2 dan Tugas 3 di folder yang sama saat script dijalankan.
@@ -81,9 +81,9 @@ Siapkan tiga gambar dengan nama berikut, taruh di folder yang sama dengan script
 
 | File | Fungsi |
 |---|---|
-| `gambar_terang.jpg` | Citra dengan kondisi terang |
-| `gambar_gelap.jpg` | Citra dengan kondisi gelap |
-| `gambar_kontras_rendah.jpg` | Citra dengan kontras rendah |
+| `gambar_terang.JPG` | Citra dengan kondisi terang |
+| `gambar_gelap.JPG` | Citra dengan kondisi gelap |
+| `gambar_kontras_rendah.JPG` | Citra dengan kontras rendah |
 
 Kalau nama file gambar kamu berbeda, ubah variabel `PATH_TERANG`/`PATH_GAMBAR` di bagian atas tiap script sesuai nama file kamu.
 
@@ -94,7 +94,7 @@ Kalau nama file gambar kamu berbeda, ubah variabel `PATH_TERANG`/`PATH_GAMBAR` d
 Jalankan:
 
 ```bash
-python image_lab.py
+python "tugas 1 pcv.py"
 ```
 
 Mencakup:
@@ -103,13 +103,17 @@ Mencakup:
 2. **Statistik citra** — `shape`, `dtype`, min, max, mean dari tiga citra (terang, gelap, kontras rendah).
 3. **Patch 8×8** — mengambil potongan 8×8 piksel dari titik paling gelap dan paling terang (dicari lewat citra grayscale).
 4. **Rasio kompresi** — membandingkan ukuran data mentah (`tinggi × lebar × channel × byte`) dengan ukuran file di disk.
-5. **Bonus**: menu konversi warna (grayscale, red/blue/green/yellow-scale), hasil disimpan sebagai `.png`.
+5. **Bonus**: menu konversi warna (grayscale, red/blue/green/yellow-scale), hasil disimpan sebagai `.png` — contoh: `gambar_terang_grayscale.png`.
+
+| Asli | Grayscale |
+|---|---|
+| ![asli](gambar_terang.JPG) | ![grayscale](gambar_terang_grayscale.png) |
 
 <details>
 <summary>Contoh output terminal</summary>
 
 ```text
-Citra   : gambar_terang.jpg
+Citra   : gambar_terang.JPG
   shape : (720, 1280, 3)
   dtype : uint8
   min   : 0
@@ -130,7 +134,7 @@ Rasio kompresi         : 8.00 : 1
 Jalankan:
 
 ```bash
-python 2-ti-eq.py
+python "tugas 2 pcv.py"
 ```
 
 Semua histogram, PDF, CDF, dan LUT dihitung manual (loop per level intensitas 0–255), tanpa `np.histogram`/`np.bincount`/`cv2.equalizeHist`/`cv2.LUT`.
@@ -154,13 +158,13 @@ Semua histogram, PDF, CDF, dan LUT dihitung manual (loop per level intensitas 0�
 
 | Asli | Negatif | Log |
 |---|---|---|
-| ![asli](gambar_kontras_rendah.jpg) | ![negatif](hasil_negatif.png) | ![log](hasil_log.png) |
+| ![asli](gambar_kontras_rendah.JPG) | ![negatif](hasil_negatif.png) | ![log](hasil_log.png) |
 
 | Sebelum Ekualisasi | Sesudah Ekualisasi |
 |---|---|
-| ![sebelum](gambar_kontras_rendah.jpg) | ![sesudah](hasil_ekualisasi.png) |
+| ![sebelum](gambar_kontras_rendah.JPG) | ![sesudah](hasil_ekualisasi.png) |
 
-> Gambar di atas otomatis muncul setelah kamu menjalankan `2-ti-eq.py` dan file `hasil_*.png` sudah ada di folder yang sama dengan README ini.
+> Gambar di atas otomatis muncul setelah kamu menjalankan `tugas 2 pcv.py` dan file `hasil_*.png` sudah ada di folder yang sama dengan README ini.
 
 ---
 
@@ -169,7 +173,7 @@ Semua histogram, PDF, CDF, dan LUT dihitung manual (loop per level intensitas 0�
 Jalankan:
 
 ```bash
-python 3-filter-spasial.py
+python "tugas 3 pcv.py"
 ```
 
 Inti tugas ini adalah **konvolusi 2D manual** (`konvolusi_2d()`): kernel digeser piksel demi piksel di atas citra (dengan zero-padding manual), dikalikan elemen-per-elemen, lalu dijumlahkan — tanpa `cv2.filter2D`.
@@ -193,13 +197,13 @@ Inti tugas ini adalah **konvolusi 2D manual** (`konvolusi_2d()`): kernel digeser
 
 | Asli | Mean 3×3 | Gaussian 5×5 | Median 3×3 |
 |---|---|---|---|
-| ![asli](gambar_terang.jpg) | ![mean](hasil_mean.png) | ![gaussian](hasil_gaussian.png) | ![median](hasil_median.png) |
+| ![asli](gambar_terang.JPG) | ![mean](hasil_mean.png) | ![gaussian](hasil_gaussian.png) | ![median](hasil_median.png) |
 
 **Sharpening:**
 
 | Asli | Sharpening |
 |---|---|
-| ![asli](gambar_terang.jpg) | ![sharpen](hasil_sharpen.png) |
+| ![asli](gambar_terang.JPG) | ![sharpen](hasil_sharpen.png) |
 
 **Edge Detection:**
 

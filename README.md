@@ -1,75 +1,112 @@
-# PCVTask1ImageChangingColours
-# IMAGE LAB — Tugas Pengolahan Citra Digital
+# PCV-Tasks — Pengolahan Citra Digital
 
-Program Python sederhana untuk mengerjakan tugas **Pengolahan Citra Digital** menggunakan **NumPy, OpenCV, dan Matplotlib**.
-
-Program ini mencakup pembacaan dan visualisasi citra, analisis statistik piksel, pengambilan patch 8×8 dari area gelap dan terang, perhitungan rasio kompresi, serta fitur bonus berupa konversi warna.
+Kumpulan program Python untuk tugas **Pengolahan Citra Digital**, dari operasi dasar (baca/statistik citra) sampai transformasi intensitas, ekualisasi histogram, dan filter spasial — semuanya dihitung manual memakai **NumPy**, tanpa mengandalkan fungsi jadi dari OpenCV untuk proses intinya.
 
 ---
 
 ## 📋 Daftar Isi
 
-* [Deskripsi](#-deskripsi)
-* [Fitur](#-fitur)
+* [Ringkasan Tugas](#-ringkasan-tugas)
 * [Teknologi yang Digunakan](#-teknologi-yang-digunakan)
 * [Struktur Folder](#-struktur-folder)
 * [Instalasi](#-instalasi)
 * [Persiapan File Gambar](#-persiapan-file-gambar)
-* [Cara Menjalankan Program](#-cara-menjalankan-program)
-* [Penjelasan Soal](#-penjelasan-soal)
-* [Fitur Bonus](#-fitur-bonus)
-* [Contoh Output](#-contoh-output)
+* [Tugas 1 — Statistik & Patch Citra](#-tugas-1--statistik--patch-citra)
+* [Tugas 2 — Transformasi Intensitas & Ekualisasi Histogram](#-tugas-2--transformasi-intensitas--ekualisasi-histogram)
+* [Tugas 3 — Filter Spasial](#-tugas-3--filter-spasial)
 * [Catatan](#-catatan)
 * [Lisensi](#-lisensi)
 
 ---
 
-## 📖 Deskripsi
+## 📖 Ringkasan Tugas
 
-**IMAGE LAB** adalah program untuk melakukan beberapa operasi dasar pengolahan citra digital menggunakan Python.
+| Tugas | File | Fokus |
+|---|---|---|
+| 1 | `image_lab.py` | Baca citra, statistik piksel, patch 8×8, rasio kompresi, konversi warna |
+| 2 | `2-ti-eq.py` | Transformasi intensitas (negatif, log, power-law, contrast stretching) & ekualisasi histogram manual |
+| 3 | `3-filter-spasial.py` | Konvolusi 2D manual: smoothing, sharpening, edge detection, median filter |
 
-Program menggunakan **OpenCV** untuk membaca dan memproses gambar, **NumPy** untuk melakukan analisis data piksel, serta **Matplotlib** untuk menampilkan gambar.
-
-Tugas utama yang dikerjakan terdiri dari 4 bagian:
-
-1. Menguji lingkungan dengan membaca dan menampilkan satu foto.
-2. Membaca tiga citra dan menampilkan statistiknya.
-3. Mengambil potongan piksel berukuran 8×8 dari area gelap dan terang.
-4. Membandingkan ukuran data mentah dengan ukuran file untuk menghitung rasio kompresi.
-
-Selain itu, terdapat fitur bonus untuk melakukan konversi citra ke beberapa mode warna.
+Aturan yang dipegang di Tugas 2 & 3: **dilarang** memakai fungsi bawaan OpenCV/NumPy untuk proses citranya (`cv2.equalizeHist`, `cv2.LUT`, `cv2.filter2D`, `cv2.GaussianBlur`, `cv2.Sobel`, `np.histogram`, dsb). Semua histogram, LUT, dan konvolusi dihitung sendiri lewat operasi array NumPy. `cv2.imread`/`cv2.imwrite`/`matplotlib` hanya dipakai untuk baca & tampilkan, bukan untuk memproses.
 
 ---
 
-## ✨ Fitur
+## 🛠 Teknologi yang Digunakan
 
-### Soal 1 — Baca dan Tampilkan Citra
-
-Program membaca satu file gambar menggunakan OpenCV kemudian menampilkannya menggunakan Matplotlib.
-
-Karena OpenCV menggunakan format channel **BGR**, sedangkan Matplotlib menggunakan **RGB**, program melakukan konversi terlebih dahulu.
-
-Informasi ukuran gambar juga ditampilkan.
+* **Python 3**
+* **NumPy** — array & operasi matematika citra
+* **OpenCV** — baca/tulis file gambar saja
+* **Matplotlib** — visualisasi citra & histogram
 
 ---
 
-### Soal 2 — Statistik Citra
+## 📁 Struktur Folder
 
-Program dapat membaca tiga citra:
+```text
+pcv-tasks/
+│
+├── image_lab.py          # Tugas 1
+├── 2-ti-eq.py             # Tugas 2
+├── 3-filter-spasial.py    # Tugas 3
+├── README.md
+│
+├── gambar_terang.jpg
+├── gambar_gelap.jpg
+└── gambar_kontras_rendah.jpg
+```
 
-* Citra terang
-* Citra gelap
-* Citra dengan kontras rendah
+File hasil (`hasil_*.png`) akan dibuat otomatis oleh Tugas 2 dan Tugas 3 di folder yang sama saat script dijalankan.
 
-Kemudian program menampilkan:
+---
 
-* `shape`
-* `dtype`
-* nilai minimum piksel
-* nilai maksimum piksel
-* nilai rata-rata (`mean`)
+## 💻 Instalasi
 
-Contoh informasi:
+```bash
+pip install numpy opencv-python matplotlib
+```
+
+Cek instalasi:
+
+```bash
+pip list
+```
+
+Pastikan `numpy`, `opencv-python`, dan `matplotlib` muncul di daftar.
+
+---
+
+## 🖼 Persiapan File Gambar
+
+Siapkan tiga gambar dengan nama berikut, taruh di folder yang sama dengan script:
+
+| File | Fungsi |
+|---|---|
+| `gambar_terang.jpg` | Citra dengan kondisi terang |
+| `gambar_gelap.jpg` | Citra dengan kondisi gelap |
+| `gambar_kontras_rendah.jpg` | Citra dengan kontras rendah |
+
+Kalau nama file gambar kamu berbeda, ubah variabel `PATH_TERANG`/`PATH_GAMBAR` di bagian atas tiap script sesuai nama file kamu.
+
+---
+
+## 🔹 Tugas 1 — Statistik & Patch Citra
+
+Jalankan:
+
+```bash
+python image_lab.py
+```
+
+Mencakup:
+
+1. **Uji lingkungan** — baca & tampilkan satu foto, konversi BGR→RGB untuk ditampilkan lewat Matplotlib.
+2. **Statistik citra** — `shape`, `dtype`, min, max, mean dari tiga citra (terang, gelap, kontras rendah).
+3. **Patch 8×8** — mengambil potongan 8×8 piksel dari titik paling gelap dan paling terang (dicari lewat citra grayscale).
+4. **Rasio kompresi** — membandingkan ukuran data mentah (`tinggi × lebar × channel × byte`) dengan ukuran file di disk.
+5. **Bonus**: menu konversi warna (grayscale, red/blue/green/yellow-scale), hasil disimpan sebagai `.png`.
+
+<details>
+<summary>Contoh output terminal</summary>
 
 ```text
 Citra   : gambar_terang.jpg
@@ -78,403 +115,111 @@ Citra   : gambar_terang.jpg
   min   : 0
   max   : 255
   mean  : 142.37
-```
 
----
-
-### Soal 3 — Patch 8×8 Piksel
-
-Program mencari:
-
-* piksel paling gelap
-* piksel paling terang
-
-Pencarian dilakukan berdasarkan citra grayscale.
-
-Setelah koordinat ditemukan, program mengambil area berukuran **8×8 piksel** di sekitar lokasi tersebut.
-
-Untuk citra berwarna, nilai piksel ditampilkan berdasarkan channel:
-
-* Blue
-* Green
-* Red
-
----
-
-### Soal 4 — Rasio Kompresi
-
-Program membandingkan:
-
-1. Ukuran data mentah citra di memori.
-2. Ukuran file gambar di disk.
-
-Ukuran data mentah dihitung berdasarkan:
-
-```text
-tinggi × lebar × jumlah channel × byte per piksel
-```
-
-Kemudian rasio kompresi dihitung dengan rumus:
-
-```text
-Rasio Kompresi = Ukuran Data Mentah / Ukuran File
-```
-
-Contoh:
-
-```text
 Ukuran data mentah     : 2,764,800 byte
 Ukuran file di disk    : 345,600 byte
 Rasio kompresi         : 8.00 : 1
 ```
 
-Artinya ukuran file di disk sekitar 8 kali lebih kecil dibandingkan data mentahnya.
+</details>
 
 ---
 
-## 🎨 Fitur Bonus
+## 🔹 Tugas 2 — Transformasi Intensitas & Ekualisasi Histogram
 
-Program menyediakan beberapa pilihan konversi warna:
-
-| Pilihan | Mode             |
-| ------- | ---------------- |
-| 1       | Grayscale        |
-| 2       | Red-scale        |
-| 3       | Blue-scale       |
-| 4       | Yellow-scale     |
-| 5       | Green-scale      |
-| 0       | Kembali / lewati |
-
-### Grayscale
-
-Mengubah citra berwarna menjadi citra grayscale.
-
-### Red-scale
-
-Hanya mempertahankan channel **Red**, sedangkan Blue dan Green dibuat menjadi 0.
-
-### Blue-scale
-
-Hanya mempertahankan channel **Blue**, sedangkan Green dan Red dibuat menjadi 0.
-
-### Green-scale
-
-Hanya mempertahankan channel **Green**, sedangkan Blue dan Red dibuat menjadi 0.
-
-### Yellow-scale
-
-Warna kuning diperoleh dari kombinasi:
-
-```text
-Red + Green
-```
-
-Oleh karena itu, channel Blue dibuat menjadi 0.
-
----
-
-## 🛠 Teknologi yang Digunakan
-
-Program dibuat menggunakan:
-
-* **Python 3**
-* **NumPy**
-* **OpenCV**
-* **Matplotlib**
-
-Library yang digunakan di dalam program:
-
-```python
-import os
-import cv2
-import numpy as np
-import matplotlib.pyplot as plt
-```
-
----
-
-## 📁 Struktur Folder
-
-Struktur folder yang disarankan:
-
-```text
-image-lab/
-│
-├── image_lab.py
-├── README.md
-│
-├── gambar_terang.jpg
-├── gambar_gelap.jpg
-└── gambar_kontras_rendah.jpg
-```
-
-Keterangan:
-
-| File                        | Fungsi                      |
-| --------------------------- | --------------------------- |
-| `image_lab.py`              | Program utama               |
-| `README.md`                 | Dokumentasi proyek          |
-| `gambar_terang.jpg`         | Citra dengan kondisi terang |
-| `gambar_gelap.jpg`          | Citra dengan kondisi gelap  |
-| `gambar_kontras_rendah.jpg` | Citra dengan kontras rendah |
-
-File hasil konversi warna akan dibuat otomatis oleh program dalam format `.png`.
-
----
-
-## 💻 Instalasi
-
-Pastikan **Python 3** sudah terpasang di komputer.
-
-Buka terminal pada VS Code, kemudian jalankan:
+Jalankan:
 
 ```bash
-pip install numpy opencv-python matplotlib
+python 2-ti-eq.py
 ```
 
-Untuk memastikan library sudah berhasil terpasang, dapat menggunakan:
+Semua histogram, PDF, CDF, dan LUT dihitung manual (loop per level intensitas 0–255), tanpa `np.histogram`/`np.bincount`/`cv2.equalizeHist`/`cv2.LUT`.
+
+**Fungsi utama:**
+
+| Fungsi | Kegunaan |
+|---|---|
+| `baca_grayscale_manual()` | Konversi ke grayscale manual: `0.299R + 0.587G + 0.114B` |
+| `transformasi_negatif()` | `s = (L-1) - r`, membalik gelap↔terang |
+| `transformasi_log()` | `s = c·log(1+r)`, memperjelas detail area gelap |
+| `transformasi_power_law()` | Gamma correction: `s = c·r^γ` (γ<1 lebih terang, γ>1 lebih gelap) |
+| `peregangan_kontras()` | Contrast stretching piecewise-linear 2 titik kontrol |
+| `hitung_histogram_manual()` | Hitung kemunculan tiap level intensitas |
+| `hitung_pdf()` / `hitung_cdf_manual()` | Probability & cumulative distribution function |
+| `ekualisasi_histogram_manual()` | Histogram → PDF → CDF → LUT → terapkan ke citra |
+
+**Hasil yang disimpan:** `hasil_negatif.png`, `hasil_log.png`, `hasil_ekualisasi.png`
+
+### Contoh hasil
+
+| Asli | Negatif | Log |
+|---|---|---|
+| ![asli](gambar_kontras_rendah.jpg) | ![negatif](hasil_negatif.png) | ![log](hasil_log.png) |
+
+| Sebelum Ekualisasi | Sesudah Ekualisasi |
+|---|---|
+| ![sebelum](gambar_kontras_rendah.jpg) | ![sesudah](hasil_ekualisasi.png) |
+
+> Gambar di atas otomatis muncul setelah kamu menjalankan `2-ti-eq.py` dan file `hasil_*.png` sudah ada di folder yang sama dengan README ini.
+
+---
+
+## 🔹 Tugas 3 — Filter Spasial
+
+Jalankan:
 
 ```bash
-pip list
+python 3-filter-spasial.py
 ```
 
-Pastikan terdapat:
+Inti tugas ini adalah **konvolusi 2D manual** (`konvolusi_2d()`): kernel digeser piksel demi piksel di atas citra (dengan zero-padding manual), dikalikan elemen-per-elemen, lalu dijumlahkan — tanpa `cv2.filter2D`.
 
-```text
-numpy
-opencv-python
-matplotlib
-```
+**Filter yang didemonstrasikan:**
 
----
+| Kategori | Filter | Fungsi |
+|---|---|---|
+| Smoothing | Mean filter | `buat_kernel_mean()` |
+| Smoothing | Gaussian filter | `buat_kernel_gaussian()` |
+| Smoothing (non-linear) | Median filter | `filter_median_manual()` — pakai median tetangga, bukan konvolusi, cocok untuk noise salt & pepper |
+| Sharpening | Kernel penajaman 3×3 | `buat_kernel_sharpen()` |
+| Edge Detection | Sobel X, Sobel Y, magnitude | `deteksi_tepi_sobel()` |
+| Edge Detection | Laplacian | `buat_kernel_laplacian()` |
 
-## 🖼 Persiapan File Gambar
+**Hasil yang disimpan:** `hasil_mean.png`, `hasil_gaussian.png`, `hasil_median.png`, `hasil_sharpen.png`, `hasil_sobel_magnitude.png`, `hasil_laplacian.png`
 
-Sebelum menjalankan program, siapkan tiga gambar.
+### Contoh hasil
 
-### 1. Gambar terang
+**Smoothing:**
 
-Simpan dengan nama:
+| Asli | Mean 3×3 | Gaussian 5×5 | Median 3×3 |
+|---|---|---|---|
+| ![asli](gambar_terang.jpg) | ![mean](hasil_mean.png) | ![gaussian](hasil_gaussian.png) | ![median](hasil_median.png) |
 
-```text
-gambar_terang.jpg
-```
+**Sharpening:**
 
-### 2. Gambar gelap
+| Asli | Sharpening |
+|---|---|
+| ![asli](gambar_terang.jpg) | ![sharpen](hasil_sharpen.png) |
 
-Simpan dengan nama:
+**Edge Detection:**
 
-```text
-gambar_gelap.jpg
-```
-
-### 3. Gambar kontras rendah
-
-Simpan dengan nama:
-
-```text
-gambar_kontras_rendah.jpg
-```
-
-Ketiga file tersebut sebaiknya diletakkan di folder yang sama dengan `image_lab.py`.
-
-Jika ingin menggunakan nama file berbeda, ubah bagian berikut pada program:
-
-```python
-PATH_TERANG = "gambar_terang.jpg"
-PATH_GELAP = "gambar_gelap.jpg"
-PATH_KONTRAS_RENDAH = "gambar_kontras_rendah.jpg"
-```
-
-Contohnya:
-
-```python
-PATH_TERANG = "foto_pagi.jpg"
-PATH_GELAP = "foto_malam.jpg"
-PATH_KONTRAS_RENDAH = "foto_kabut.jpg"
-```
-
----
-
-## ▶️ Cara Menjalankan Program
-
-### Menggunakan VS Code
-
-1. Buka folder proyek di VS Code.
-2. Pastikan `image_lab.py` dan file gambar berada di folder yang benar.
-3. Buka file `image_lab.py`.
-4. Klik tombol **Run Python File**.
-5. Program akan mulai menjalankan seluruh tahapan tugas.
-
-### Menggunakan Terminal
-
-Masuk ke folder proyek:
-
-```bash
-cd image-lab
-```
-
-Kemudian jalankan:
-
-```bash
-python image_lab.py
-```
-
-Pada beberapa sistem, Python dapat dijalankan dengan:
-
-```bash
-python3 image_lab.py
-```
-
----
-
-## 🔄 Alur Program
-
-Secara umum, program berjalan dengan alur berikut:
-
-```text
-Mulai
-  │
-  ▼
-Baca & tampilkan gambar terang
-  │
-  ▼
-Analisis statistik 3 gambar
-  │
-  ▼
-Cari area paling gelap & terang
-  │
-  ▼
-Ambil patch 8×8 piksel
-  │
-  ▼
-Hitung rasio kompresi
-  │
-  ▼
-Menu konversi warna
-  │
-  ▼
-Selesai
-```
-
----
-
-## 📊 Contoh Output
-
-Ketika program dijalankan, terminal akan menampilkan informasi seperti:
-
-```text
-############################################################
-# SOAL 1 - UJI LINGKUNGAN: BACA & TAMPILKAN 1 FOTO
-############################################################
-
-[OK] Berhasil membaca & menampilkan: gambar_terang.jpg
-     Ukuran (H, W, C): (720, 1280, 3)
-```
-
-Kemudian:
-
-```text
-============================================================
-SOAL 2 - LAPORAN STATISTIK CITRA
-============================================================
-
-Citra   : gambar_terang.jpg
-  shape : (720, 1280, 3)
-  dtype : uint8
-  min   : 0
-  max   : 255
-  mean  : 145.32
-```
-
-Untuk soal 3:
-
-```text
-============================================================
-SOAL 3 - PATCH 8x8 AREA GELAP & TERANG
-============================================================
-
---- Patch 8x8 [area gelap] mulai (baris=100, kolom=200) ---
-Bentuk patch: (8, 8, 3)
-```
-
-Dan untuk soal 4:
-
-```text
-============================================================
-SOAL 4 - RASIO KOMPRESI: gambar_terang.jpg
-============================================================
-
-Dimensi citra          : 720 x 1280 x 3
-Byte per piksel        : 1
-Ukuran data mentah     : 2,764,800 byte
-Ukuran file di disk    : 412,500 byte
-Rasio kompresi         : 6.70 : 1
-```
-
----
-
-## 🧩 Fungsi Utama
-
-Beberapa fungsi utama dalam program:
-
-| Fungsi                          | Kegunaan                               |
-| ------------------------------- | -------------------------------------- |
-| `uji_baca_dan_tampilkan()`      | Membaca dan menampilkan gambar         |
-| `laporan_statistik_citra()`     | Menghitung statistik citra             |
-| `cetak_patch_8x8()`             | Mencetak patch 8×8 piksel              |
-| `cari_titik_gelap_dan_terang()` | Mencari piksel paling gelap dan terang |
-| `soal3_area_gelap_terang()`     | Menjalankan analisis patch             |
-| `hitung_rasio_kompresi()`       | Menghitung rasio kompresi              |
-| `ke_grayscale()`                | Konversi grayscale                     |
-| `ke_redscale()`                 | Konversi red-scale                     |
-| `ke_bluescale()`                | Konversi blue-scale                    |
-| `ke_yellowscale()`              | Konversi yellow-scale                  |
-| `ke_greenscale()`               | Konversi green-scale                   |
-| `menu_konversi_warna()`         | Menampilkan menu konversi warna        |
+| Sobel Magnitude | Laplacian |
+|---|---|
+| ![sobel](hasil_sobel_magnitude.png) | ![laplacian](hasil_laplacian.png) |
 
 ---
 
 ## ⚠️ Catatan
 
-1. Pastikan nama file gambar sesuai dengan nama yang terdapat pada variabel `PATH_TERANG`, `PATH_GELAP`, dan `PATH_KONTRAS_RENDAH`.
-
-2. File gambar harus dapat dibaca oleh OpenCV.
-
-3. Untuk soal 3, ukuran gambar sebaiknya minimal **8×8 piksel**, karena program mengambil patch berukuran 8×8.
-
-4. OpenCV membaca gambar berwarna dalam format **BGR**, bukan RGB.
-
-5. Nilai piksel pada gambar bertipe `uint8` berada pada rentang:
-
-```text
-0 — 255
-```
-
-6. Rasio kompresi yang dihitung merupakan perbandingan ukuran array citra yang telah didekodekan dengan ukuran file gambar di disk. Nilainya bukan metrik kualitas kompresi JPEG/PNG secara khusus.
-
-7. Hasil konversi warna akan disimpan otomatis sebagai file `.png` di folder tempat program dijalankan.
-
----
-
-## 👨‍💻 Tujuan Pembelajaran
-
-Melalui proyek ini, pengguna diharapkan dapat memahami dasar-dasar:
-
-* Pembacaan citra menggunakan OpenCV.
-* Representasi citra sebagai array NumPy.
-* Dimensi dan tipe data citra.
-* Nilai piksel dan channel warna.
-* Konversi BGR ke RGB.
-* Konversi citra ke grayscale.
-* Analisis area gelap dan terang.
-* Pengambilan subset/patch piksel.
-* Perhitungan ukuran data mentah.
-* Konsep dasar kompresi citra.
-* Manipulasi channel warna pada citra digital.
+1. Pastikan nama file gambar di tiap script (`PATH_TERANG`, `PATH_GAMBAR`, dll) sesuai dengan file gambar kamu.
+2. OpenCV membaca gambar dalam urutan channel **BGR**, bukan RGB — semua konversi ke grayscale di Tugas 2 & 3 dilakukan manual dengan rumus luminance, bukan `cv2.cvtColor`.
+3. Nilai piksel `uint8` berada di rentang **0–255**; semua fungsi transformasi melakukan `clip` ke rentang ini sebelum dikonversi ke `uint8`.
+4. Tugas 2 & 3 memproses citra secara **grayscale** (2D), bukan citra berwarna 3 channel.
+5. Untuk citra berukuran besar, konvolusi manual (loop piksel per piksel) di Tugas 3 bisa terasa lambat — ini wajar karena tujuannya menunjukkan mekanisme konvolusi, bukan performa.
+6. Gambar hasil (`hasil_*.png`) dibuat otomatis di folder yang sama saat script dijalankan; commit/upload file-file ini kalau ingin README menampilkan hasil secara langsung di GitHub.
 
 ---
 
 ## 📄 Lisensi
 
-Proyek ini dibuat untuk keperluan **pembelajaran dan**
+Proyek ini dibuat untuk keperluan pembelajaran.
